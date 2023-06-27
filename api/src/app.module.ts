@@ -31,9 +31,4 @@ import { MongooseModule } from '@nestjs/mongoose';
     }
   ]
 })
-export class AppModule {
-  constructor() {
-    console.log('AppModule constructor');
-    console.log('process.env.DATABASE_MONGO_URL', process.env.DATABASE_MONGO_URL);
-  }
-}
+export class AppModule {}
