@@ -1,0 +1,5 @@
+<template>
+  <div class="artboard artboard-horizontal phone-6">1024×320</div>
+</template>
+
+<script lang="ts" setup></script>
