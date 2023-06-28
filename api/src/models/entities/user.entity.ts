@@ -8,7 +8,6 @@ export enum USER_ROLE {
   USER = 'ROLE_USER'
 }
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
 @Schema()
 export class User {
@@ -31,18 +30,11 @@ export class User {
     type: String,
     required: true,
     trim: true,
-    minlength: 8,
-    maxlength: 64,
-    validate: {
-      validator: (password: string) => regex.test(password),
-      message: (props: any) => `${props.value} is not a valid password!`
-    }
+    minlength: 8
   })
   password: string;
 
   @Prop({
-    type: String,
-    required: true,
     default: [USER_ROLE.USER]
   })
   roles: USER_ROLE[];
@@ -53,22 +45,12 @@ export class User {
     minlength: 2,
     type: String
   })
-  society: string;
+  company: string;
 
   @Prop({
     required: true,
     trim: true,
-    type: String,
-    validate: {
-      validator: (siteUrl: string) => {
-        try {
-          new URL(siteUrl);
-          return true;
-        } catch (error) {
-          return false;
-        }
-      }
-    }
+    type: String
   })
   siteUrl: string;
 

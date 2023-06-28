@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from '../models/dto/create-user.dto';
-import { UpdateUserDto } from '../models/dto/update-user.dto';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import { Roles } from 'src/decorator';
 import { USER_ROLE } from 'src/models';
+import { CreateUserDto } from '../models/dto/create-user.dto';
+import { UpdateUserDto } from '../models/dto/update-user.dto';
+import { UserService } from './user.service';
+import { CleanResponseUser } from './decorator/users.decorator';
 
 @Controller({ path: 'users', version: '1' })
+@CleanResponseUser()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

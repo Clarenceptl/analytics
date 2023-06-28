@@ -2,17 +2,16 @@ import { Body, Controller, HttpCode, Param, Patch, Post, ValidationPipe } from '
 import { Roles, isPublic } from 'src/decorator';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto, USER_ROLE } from '../models';
-import { UserService } from 'src/user';
 
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
-  constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
   @isPublic()
   @HttpCode(201)
   public register(@Body(ValidationPipe) data: CreateUserDto) {
-    return this.userService.create(data);
+    return this.authService.register(data);
   }
 
   @Post('login')
@@ -27,6 +26,6 @@ export class AuthController {
   @isPublic()
   @HttpCode(200)
   public verifyAccount(@Param('id') id: string) {
-    return this.userService.verifyAccount(id);
+    return this.authService.verifyAccount(id);
   }
 }

@@ -1,22 +1,22 @@
 import { HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginUserDto } from 'src/models';
-import { UserService } from 'src/user';
-import { compareSync } from 'bcrypt';
+import { compare } from 'bcrypt';
+import { CreateUserDto, LoginUserDto } from 'src/models';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService, private jwtService: JwtService) {}
+  constructor(private jwtService: JwtService, private readonly userService: UserService) {}
 
   async login(loginDto: LoginUserDto) {
     try {
-      const user = await this.userService.findOneByEmail(loginDto.email);
-      if (!compareSync(loginDto.password, user.password)) {
+      const { data } = await this.userService.findOneByEmail(loginDto.email);
+      if (!compare(loginDto.password, data.password)) {
         throw new UnauthorizedException();
       }
       const payload = {
-        sub: user._id.toString(),
-        roles: user.roles
+        sub: data._id.toString(),
+        roles: data.roles
       };
       return {
         access_token: await this.jwtService.signAsync(payload, { expiresIn: '1d' })
@@ -32,7 +32,11 @@ export class AuthService {
     }
   }
 
-  async register(data: any) {
-    return data;
+  async verifyAccount(id: string) {
+    return await this.userService.verifyAccount(id);
+  }
+
+  async register(data: CreateUserDto) {
+    return await this.userService.create(data);
   }
 }

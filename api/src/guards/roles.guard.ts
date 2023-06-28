@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { USER_ROLE } from '../models';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from 'src/decorator';
 import { UserService } from 'src/user';
+import { USER_ROLE } from '../models';
 
 @Injectable()
 export class RolesGuards implements CanActivate {
@@ -31,10 +31,10 @@ export class OwnUserGuards implements CanActivate {
     const { user } = context.switchToHttp().getRequest();
     if (!user) throw new UnauthorizedException();
     const { id } = context.switchToHttp().getRequest().params;
-    const requestedUser = await this.userService.findOne(id);
-    if (!requestedUser) {
+    const { data } = await this.userService.findOne(id);
+    if (!data) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
-    return requestedUser._id.equals(user._id) || user.roles.includes(USER_ROLE.ADMIN);
+    return data._id.equals(user._id) || user.roles.includes(USER_ROLE.ADMIN);
   }
 }

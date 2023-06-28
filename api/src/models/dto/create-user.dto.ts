@@ -11,7 +11,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  society: string;
+  company: string;
 
   @IsString()
   @IsNotEmpty()
