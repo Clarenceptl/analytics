@@ -2,7 +2,7 @@ import { BadRequestException, CanActivate, ExecutionContext, Injectable } from '
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { UserService } from '../../user';
+import { UserService } from '../user';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

@@ -5,6 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { SeedModule } from './seed/seed.module';
+import { AuthGuard, RolesGuards } from './guards';
 
 @Module({
   imports: [
@@ -21,13 +23,22 @@ import { MongooseModule } from '@nestjs/mongoose';
       limit: 10
     }),
     AuthModule,
-    UserModule
+    UserModule,
+    SeedModule
   ],
   controllers: [],
   providers: [
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuards
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard
     }
   ]
 })
