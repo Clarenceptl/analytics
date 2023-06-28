@@ -1,16 +1,16 @@
 version: '3.8'
 
 services:
-  mongodb:
+  mongo:
     image: mongo
     container_name: analytics_mongodb
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_MONGO_USERNAME:-user}
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_MONGO_USERNAME:-analytics}
       MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_MONGO_PASSWORD:-password}
-      MONGO_INITDB_DATABASE: ${DATABASE_MONGO_NAME:-analytics}
+      MONGO_INITDB_DATABASE: ${DATABASE_MONGO_NAME:-analyticsdb}
     volumes:
       - /data/db
     ports:
@@ -42,5 +42,5 @@ services:
     ports:
       - '3080:3080'
     depends_on:
-      - mongodb
+      - mongo
     
