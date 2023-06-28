@@ -1,7 +1,9 @@
-.idea
-.vscode
-.DS_Store
+**/.npm
+**/node_modules/
+**/.git
+**/README.md
+**/npm-debug.log
+**/dist
+**/.DS_Store
+**/.idea
 .env
-.npm
-dist
-logs
