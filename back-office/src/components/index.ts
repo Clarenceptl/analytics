@@ -1,3 +1,6 @@
 import Navbar from './Navbar.vue';
 
-export { Navbar };
+//#region Auth
+import LoginForm from './auth/LoginForm.vue';
+
+export { LoginForm, Navbar };
