@@ -1,3 +1,3 @@
 export enum EMITS {
-  SUBMIT = 'submit'
+  SUBMIT = 'on-submit'
 }

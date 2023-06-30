@@ -1,5 +1,9 @@
 //#region DTO
 export * from './dto/user.dto';
+export interface ApiDTO {
+  success: boolean;
+  data: any;
+}
 //#endregion
 
 //#region ViewModels

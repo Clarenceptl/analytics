@@ -19,7 +19,8 @@ export const useUserStore = defineStore('userStore', () => {
   //#region Services methods
   const loadContextUser = async () => {
     if (!contextUser.user?._id) {
-      const token = localStorage.getItem('bearer-token');
+      const token = localStorage.getItem(TOKEN.BEARER);
+
       if (!token) return null;
 
       const res = await UserService.getSelfUser();
@@ -32,19 +33,19 @@ export const useUserStore = defineStore('userStore', () => {
 
   const getUsers = async () => {
     const res = await UserService.getUsers();
-    console.log(res);
     return res;
   };
 
   const register = async (user: UserDTO) => {
-    const res = await AuthService.registerUser(user);
+    return await AuthService.registerUser(user);
   };
 
   const login = async (data: LoginVM) => {
     const res = await AuthService.loginUser(data);
     if (res?.success) {
-      localStorage.setItem(TOKEN.BEARER, res.data.token);
+      localStorage.setItem(TOKEN.BEARER, res.data?.accessToken ?? '');
     }
+
     return res;
   };
 
