@@ -22,9 +22,9 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get('self')
+  @Get('getSelf')
   findSelf(@Req() req: any) {
-    return this.userService.findOne(req.user.id);
+    return this.userService.findOne(req?.user?._id ?? '');
   }
 
   @Get(':id')

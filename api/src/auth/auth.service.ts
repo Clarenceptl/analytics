@@ -15,11 +15,14 @@ export class AuthService {
         throw new UnauthorizedException();
       }
       const payload = {
-        sub: data._id.toString(),
+        id: data._id.toString(),
         roles: data.roles
       };
       return {
-        access_token: await this.jwtService.signAsync(payload, { expiresIn: '1d' })
+        success: true,
+        data: {
+          accessToken: await this.jwtService.signAsync(payload, { expiresIn: '1d' })
+        }
       };
     } catch (err) {
       if (err instanceof HttpException) {
