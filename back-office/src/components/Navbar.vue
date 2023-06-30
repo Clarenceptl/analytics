@@ -1,25 +1,29 @@
 <template>
-  <div class="navbar bg-teal-700 z-10">
+  <div class="navbar bg-teal-700 z-10 relative">
     <div class="flex-1">
-      <router-link :to="{ name: 'home' }" class="btn btn-ghost normal-case text-xl text-white">Analytics</router-link>
+      <router-link :to="{ name: ROUTES_NAMES.HOME }" class="btn btn-ghost normal-case text-xl text-white"
+        >Analytics</router-link
+      >
     </div>
     <div class="flex-none">
       <ul class="menu menu-horizontal flex items-center px-1">
-        <li>
+        <li v-if="isConnected">
           <details>
-            <summary class="text-white hover:text-white">email@mail.com</summary>
+            <summary class="text-white hover:text-white">Mon compte</summary>
             <ul class="p-2 bg-base-200">
               <li>
-                <router-link :to="{ name: 'informations' }">Mes informations</router-link>
+                <router-link :to="{ name: informations }">Mes informations</router-link>
               </li>
             </ul>
           </details>
         </li>
       </ul>
 
-      <router-link v-if="val" class="btn btn-primary" :to="{ name: 'login' }">Login</router-link>
+      <router-link v-if="!isConnected" class="btn btn-secondary" :to="{ name: switchRoute() }">{{
+        switchRoute(true)
+      }}</router-link>
 
-      <button v-else class="btn btn-primary h-full flex items-center">
+      <button @click="logout" v-else class="btn btn-secondary h-full flex items-center">
         <span>Logout</span>
       </button>
     </div>
@@ -27,5 +31,22 @@
 </template>
 
 <script lang="ts" setup>
-const val = true;
+import router, { ROUTES_NAMES } from '@/router';
+import { useUserStore } from '@/stores';
+import { capitalize, computed } from 'vue';
+
+const informations = ROUTES_NAMES.INFORMATIONS;
+
+const userStore = useUserStore();
+const isConnected = computed(() => userStore.isConnected);
+const switchRoute = (isCapitalise?: boolean): string => {
+  const res = router.currentRoute.value.name === ROUTES_NAMES.LOGIN ? ROUTES_NAMES.REGISTER : ROUTES_NAMES.LOGIN;
+
+  return isCapitalise ? capitalize(res) : res;
+};
+
+const logout = () => {
+  userStore.logout();
+  router.push({ name: ROUTES_NAMES.LOGIN });
+};
 </script>
