@@ -1,5 +1,5 @@
-import { TOKEN } from '@/enums';
-import type { LoginVM, User, UserDTO } from '@/models';
+import { TOKEN, USER_ROLE } from '@/enums';
+import type { LoginVM, RegisterDTO, User } from '@/models';
 import { AuthService, UserService } from '@/services';
 import { defineStore } from 'pinia';
 import { computed, reactive } from 'vue';
@@ -14,6 +14,7 @@ export const useUserStore = defineStore('userStore', () => {
   //#region getters
   const getContextUser = computed(() => contextUser.user);
   const isConnected = computed(() => !!contextUser.user);
+  const isAdmin = computed(() => contextUser.user?.roles?.includes(USER_ROLE.ADMIN));
   //#endregion
 
   //#region Services methods
@@ -24,6 +25,7 @@ export const useUserStore = defineStore('userStore', () => {
       if (!token) return null;
 
       const res = await UserService.getSelfUser();
+      console.log(res);
       if (res?.success) {
         contextUser.user = res.data;
       }
@@ -36,7 +38,7 @@ export const useUserStore = defineStore('userStore', () => {
     return res;
   };
 
-  const register = async (user: UserDTO) => {
+  const register = async (user: RegisterDTO) => {
     return await AuthService.registerUser(user);
   };
 
@@ -66,6 +68,7 @@ export const useUserStore = defineStore('userStore', () => {
     getContextUser,
     isConnected,
     logout,
-    getUsers
+    getUsers,
+    isAdmin
   };
 });

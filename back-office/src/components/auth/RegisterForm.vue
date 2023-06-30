@@ -80,7 +80,7 @@
 </template>
 <script lang="ts" setup>
 import { TOAST_TYPE } from '@/enums';
-import { RegisterSchema, type UserDTO } from '@/models';
+import { RegisterSchema, type RegisterDTO } from '@/models';
 import router, { ROUTES_NAMES } from '@/router';
 import { useToastStore, useUserStore } from '@/stores';
 import { ErrorMessage, Field, Form } from 'vee-validate';
@@ -89,7 +89,7 @@ const userStore = useUserStore();
 const toastStore = useToastStore();
 
 const submit = async (values: any) => {
-  const formValues = values as UserDTO;
+  const formValues = values as RegisterDTO;
   const res = await userStore.register(formValues);
   if (!res?.success) {
     return toastStore.createToast({

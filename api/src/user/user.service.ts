@@ -18,6 +18,7 @@ export class UserService {
         ...createUserDto
       });
       await res.save();
+      delete res.password;
       const response: User = res;
       return {
         success: true,
@@ -33,12 +34,31 @@ export class UserService {
     }
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    const user: User[] = await this.userModel.find();
+    if (!user || user.length === 0) {
+      throw new NotFoundException(`Users not found`);
+    }
+    return {
+      success: true,
+      data: user
+    };
+  }
+
+  async findAllUnverified() {
+    const user: User[] = await this.userModel.find({ isVerify: false });
+    if (!user || user.length === 0) {
+      throw new NotFoundException(`Users not found`);
+    }
+    return {
+      success: true,
+      data: user
+    };
   }
 
   async findOne(id: string) {
-    const user: User | null = await this.userModel.findOne({ _id: id });
+    const user: User | null = await this.userModel.findOne({ _id: id }).select('-password').exec();
+    console.log(user);
     if (!user) {
       throw new NotFoundException(`User not found`);
     }
@@ -53,7 +73,7 @@ export class UserService {
       .findOne({
         email: email
       })
-      .select('+password')
+      .select('-password')
       .exec();
     if (!user) {
       throw new NotFoundException(`User with email ${email} not found`);
@@ -64,7 +84,7 @@ export class UserService {
     };
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} user`;
   }
 
@@ -85,7 +105,7 @@ export class UserService {
   }
 
   async verifyAccount(id: string) {
-    const user: User | null = await this.userModel.findById(id).select('+password').exec();
+    const user: User | null = await this.userModel.findById(id).select('-password').exec();
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }

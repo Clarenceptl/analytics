@@ -1,11 +1,11 @@
 import { TOKEN } from '@/enums';
-import type { ApiDTO, LoginVM, UserDTO } from '@/models';
+import type { ApiDTO, LoginVM, RegisterDTO } from '@/models';
 
 const API_URL = import.meta.env.VITE_API_URL;
 const authToken = localStorage.getItem(TOKEN.BEARER) ?? '';
 
 export class AuthService {
-  static async registerUser(user: UserDTO): Promise<ApiDTO | any> {
+  static async registerUser(user: RegisterDTO): Promise<ApiDTO | any> {
     try {
       const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',

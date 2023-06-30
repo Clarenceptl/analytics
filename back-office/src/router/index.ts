@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 export enum ROUTES_NAMES {
   HOME = 'home',
+  HOME_ADMIN = 'home-admin',
+  USERS_ADMIN = 'users-admin',
   LOGIN = 'login',
   REGISTER = 'register',
   INFORMATIONS = 'informations'
@@ -14,7 +16,7 @@ const router = createRouter({
     {
       path: '/',
       name: ROUTES_NAMES.HOME,
-      component: () => import('../views/HomeView.vue'),
+      component: () => import('@/views/HomeView.vue'),
       beforeEnter: async (to, from, next) => {
         const isAuth = await authMiddleware();
         if (!isAuth) return next({ name: ROUTES_NAMES.LOGIN });
@@ -24,7 +26,7 @@ const router = createRouter({
     {
       path: '/login',
       name: ROUTES_NAMES.LOGIN,
-      component: () => import('../views/auth/LoginView.vue'),
+      component: () => import('@/views/auth/LoginView.vue'),
       beforeEnter: async (to, from, next) => {
         const isAuth = await authMiddleware();
         if (isAuth) return next({ name: ROUTES_NAMES.HOME });
@@ -34,7 +36,7 @@ const router = createRouter({
     {
       path: '/register',
       name: ROUTES_NAMES.REGISTER,
-      component: () => import('../views/auth/Register.vue'),
+      component: () => import('@/views/auth/Register.vue'),
       beforeEnter: async (to, from, next) => {
         const isAuth = await authMiddleware();
         if (isAuth) return next({ name: ROUTES_NAMES.HOME });
@@ -44,12 +46,37 @@ const router = createRouter({
     {
       path: '/my-informations',
       name: ROUTES_NAMES.INFORMATIONS,
-      component: () => import('../views/MesInformations.vue'),
+      component: () => import('@/views/MesInformations.vue'),
       beforeEnter: async (to, from, next) => {
         const isAuth = await authMiddleware();
         if (!isAuth) return next({ name: ROUTES_NAMES.LOGIN });
         next();
       }
+    },
+    {
+      path: '/admin',
+      children: [
+        {
+          path: '',
+          name: ROUTES_NAMES.HOME_ADMIN,
+          component: () => import('@/views/admin/Home.vue'),
+          beforeEnter: async (to, from, next) => {
+            const isAuth = await authMiddleware();
+            if (!isAuth) return next({ name: ROUTES_NAMES.LOGIN });
+            next();
+          }
+        },
+        {
+          path: 'users',
+          name: ROUTES_NAMES.USERS_ADMIN,
+          component: () => import('@/views/admin/ListUser.vue'),
+          beforeEnter: async (to, from, next) => {
+            const isAuth = await authMiddleware();
+            if (!isAuth) return next({ name: ROUTES_NAMES.LOGIN });
+            next();
+          }
+        }
+      ]
     }
   ]
 });
