@@ -25,11 +25,10 @@ export const useUserStore = defineStore('userStore', () => {
       if (!token) return null;
 
       const res = await UserService.getSelfUser();
-      console.log(res);
       if (res?.success) {
         contextUser.user = res.data;
       }
-      return true;
+      return res;
     }
   };
 

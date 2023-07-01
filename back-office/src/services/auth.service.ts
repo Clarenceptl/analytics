@@ -32,8 +32,8 @@ export class AuthService {
       });
       return await response.json();
     } catch (error: any) {
-      console.error(error);
-      return error.response;
+      console.error(error.message);
+      return error.message;
     }
   }
 

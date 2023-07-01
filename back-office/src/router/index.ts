@@ -7,7 +7,8 @@ export enum ROUTES_NAMES {
   USERS_ADMIN = 'users-admin',
   LOGIN = 'login',
   REGISTER = 'register',
-  INFORMATIONS = 'informations'
+  INFORMATIONS = 'informations',
+  NOT_FOUND = 'not-found'
 }
 
 const router = createRouter({
@@ -77,6 +78,11 @@ const router = createRouter({
           }
         }
       ]
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: ROUTES_NAMES.NOT_FOUND,
+      component: () => import('@/views/404.vue')
     }
   ]
 });

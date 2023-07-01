@@ -58,7 +58,6 @@ export class UserService {
 
   async findOne(id: string) {
     const user: User | null = await this.userModel.findOne({ _id: id }).select('-password').exec();
-    console.log(user);
     if (!user) {
       throw new NotFoundException(`User not found`);
     }
@@ -69,12 +68,10 @@ export class UserService {
   }
 
   async findOneByEmail(email: string) {
-    const user: User | null = await this.userModel
-      .findOne({
-        email: email
-      })
-      .select('-password')
-      .exec();
+    const user: User | null = await this.userModel.findOne({
+      email: email
+    });
+
     if (!user) {
       throw new NotFoundException(`User with email ${email} not found`);
     }
@@ -142,9 +139,9 @@ export class UserService {
       siteUrl: 'https://www.mycompanyadmin.com'
     };
 
-    const tmpUser = new this.userModel({ ...user });
+    const tmpUser = new this.userModel({ ...user, isVerify: true });
     await tmpUser.save();
-    const tmpAdmin = new this.userModel({ ...admin, roles: [USER_ROLE.ADMIN] });
+    const tmpAdmin = new this.userModel({ ...admin, roles: [USER_ROLE.ADMIN], isVerify: true });
     await tmpAdmin.save();
     console.log(`Created user with id: ${tmpUser.id}`);
   }

@@ -51,7 +51,7 @@ const submit = async (values: any) => {
   const res = await userStore.login(formValues);
   if (!res?.success) {
     return toastStore.createToast({
-      message: res?.error,
+      message: res?.message,
       type: TOAST_TYPE.ERROR
     });
   }

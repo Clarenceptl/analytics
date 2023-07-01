@@ -1,7 +1,7 @@
 import { HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
-import { CreateUserDto, LoginUserDto } from 'src/models';
+import { CreateUserDto, LoginUserDto, User } from 'src/models';
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -10,24 +10,36 @@ export class AuthService {
 
   async login(loginDto: LoginUserDto) {
     try {
-      const { data } = await this.userService.findOneByEmail(loginDto.email);
-      if (!compare(loginDto.password, data.password)) {
-        throw new UnauthorizedException();
+      const res = await this.userService.findOneByEmail(loginDto.email);
+
+      if (!res?.success) {
+        throw new UnauthorizedException('Email ou mot de passe incorrect');
+      }
+
+      const data: User = res.data;
+
+      if (!data.isVerify) {
+        throw new UnauthorizedException('Un administrateur doit valider votre compte');
+      }
+
+      if (!compare(loginDto.password, data.password ?? '')) {
+        throw new UnauthorizedException('Email ou mot de passe incorrect');
       }
       const payload = {
         id: data._id.toString(),
         roles: data.roles
       };
+      const accessToken = await this.jwtService.signAsync(payload, { expiresIn: '1d' });
       return {
         success: true,
         data: {
-          accessToken: await this.jwtService.signAsync(payload, { expiresIn: '1d' })
+          accessToken
         }
       };
     } catch (err) {
       if (err instanceof HttpException) {
         if (err instanceof UnauthorizedException || err instanceof NotFoundException) {
-          throw new UnauthorizedException("Email or password don't match");
+          throw new UnauthorizedException(err.message);
         }
         throw err;
       }

@@ -45,7 +45,7 @@ export class UserService {
       })
       return await response.json()
     } catch (error: any) {
-      console.error(error)
+      console.error(error.message)
       return error.response
     }
   }
