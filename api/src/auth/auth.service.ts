@@ -1,12 +1,18 @@
-import { HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { HttpException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ClientProxy } from '@nestjs/microservices';
 import { compare } from 'bcrypt';
-import { CreateUserDto, LoginUserDto, User } from 'src/models';
+import { SERVICE_EVENT, SERVICE_NAME } from 'src/enums';
+import { CreateUserDto, LoginUserDto, RegisterMail, User } from 'src/models';
 import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService, private readonly userService: UserService) {}
+  constructor(
+    private jwtService: JwtService,
+    private readonly userService: UserService,
+    @Inject(SERVICE_NAME.MAILING) private clientMail: ClientProxy
+  ) {}
 
   async login(loginDto: LoginUserDto) {
     try {
@@ -52,6 +58,17 @@ export class AuthService {
   }
 
   async register(data: CreateUserDto) {
-    return await this.userService.create(data);
+    const res = await this.userService.create(data);
+    if (res.success) {
+      const user = res.data;
+      const payload: RegisterMail = {
+        email: user.email,
+        fullname: user.name,
+        equipe: 'analytics'
+      };
+
+      this.clientMail.emit(SERVICE_EVENT.GET_REGISTER_MAIL_BO, payload);
+    }
+    return res;
   }
 }
