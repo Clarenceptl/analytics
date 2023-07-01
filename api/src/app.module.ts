@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { SeedModule } from './seed/seed.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { AuthModule } from './auth/auth.module';
 import { AuthGuard, RolesGuards } from './guards';
+import { SeedModule } from './seed/seed.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -26,11 +26,11 @@ import { AuthGuard, RolesGuards } from './guards';
     },
     {
       provide: APP_GUARD,
-      useClass: RolesGuards
+      useClass: AuthGuard
     },
     {
       provide: APP_GUARD,
-      useClass: AuthGuard
+      useClass: RolesGuards
     }
   ]
 })
