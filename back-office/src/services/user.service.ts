@@ -1,6 +1,7 @@
-import { TOKEN } from "@/enums"
+import { TOKEN } from '@/enums';
+import type { ApiDTO } from '@/models';
 
-const VITE_API_URL = import.meta.env.VITE_API_URL
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 export class UserService {
   static async getUser(id) {
@@ -11,15 +12,15 @@ export class UserService {
           'Content-Type': 'application/json',
           authorization: `Bearer ${localStorage.getItem(TOKEN.BEARER)}`
         }
-      })
-      return await response.json()
+      });
+      return await response.json();
     } catch (error: any) {
-      console.error(error)
-      return error.response
+      console.error(error);
+      return error.response;
     }
   }
 
-  static async getUsers() {
+  static async getUsers(): Promise<ApiDTO | string> {
     try {
       const response = await fetch(`${VITE_API_URL}/users`, {
         method: 'GET',
@@ -27,11 +28,12 @@ export class UserService {
           'Content-Type': 'application/json',
           authorization: `Bearer ${localStorage.getItem(TOKEN.BEARER)}`
         }
-      })
-      return await response.json()
+      });
+
+      return await response.json();
     } catch (error: any) {
-      console.error(error)
-      return error.response
+      console.error(error);
+      return error.message;
     }
   }
   static async getSelfUser() {
@@ -42,11 +44,11 @@ export class UserService {
           'Content-Type': 'application/json',
           authorization: `Bearer ${localStorage.getItem(TOKEN.BEARER)}`
         }
-      })
-      return await response.json()
+      });
+      return await response.json();
     } catch (error: any) {
-      console.error(error.message)
-      return error.response
+      console.error(error.message);
+      return error.response;
     }
   }
 }
