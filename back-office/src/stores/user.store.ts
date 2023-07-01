@@ -1,11 +1,13 @@
-import { TOKEN, USER_ROLE } from '@/enums';
+import { TOAST_TYPE, TOKEN, USER_ROLE } from '@/enums';
 import type { LoginVM, RegisterDTO, User } from '@/models';
 import { AuthService, UserService } from '@/services';
 import { defineStore } from 'pinia';
 import { computed, reactive } from 'vue';
+import { useToastStore } from './toast.store';
 
 export const useUserStore = defineStore('userStore', () => {
   //#region values
+  const toastStore = useToastStore();
   const contextUser = reactive<{ user: User | null }>({
     user: null
   });
@@ -32,9 +34,17 @@ export const useUserStore = defineStore('userStore', () => {
     }
   };
 
-  const getUsers = async () => {
+  const getUsers = async (): Promise<User[] | null> => {
     const res = await UserService.getUsers();
-    return res;
+    if (typeof res === 'string') {
+      toastStore.createToast({
+        message: res ?? 'Error while fetching users',
+        type: TOAST_TYPE.ERROR
+      });
+    } else {
+      return res?.data;
+    }
+    return null;
   };
 
   const register = async (user: RegisterDTO) => {

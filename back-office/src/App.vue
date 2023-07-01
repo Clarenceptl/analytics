@@ -3,7 +3,12 @@
     <Navbar />
   </header>
   <main class="mt-3">
-    <RouterView />
+    <Suspense>
+      <RouterView />
+      <template #fallback>
+        <div>Loadings</div>
+      </template>
+    </Suspense>
   </main>
 </template>
 <script setup lang="ts">
