@@ -30,6 +30,14 @@ export class User {
     type: String,
     required: true,
     trim: true,
+    minlength: 3
+  })
+  name: string;
+
+  @Prop({
+    type: String,
+    required: true,
+    trim: true,
     minlength: 8
   })
   password: string;

@@ -130,13 +130,15 @@ export class UserService {
       email: 'user@user.com',
       password,
       company: 'My company',
-      siteUrl: 'https://www.mycompany.com'
+      siteUrl: 'https://www.mycompany.com',
+      name: 'User'
     };
     const admin: CreateUserDto = {
       email: 'admin@admin.com',
       password,
       company: 'My company admin',
-      siteUrl: 'https://www.mycompanyadmin.com'
+      siteUrl: 'https://www.mycompanyadmin.com',
+      name: 'Admin'
     };
 
     const tmpUser = new this.userModel({ ...user, isVerify: true });
