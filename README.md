@@ -2,7 +2,7 @@
 
 ## Installation
 
-setup le .env docker
+setup le .env à la racine
 
 ### Build
 
