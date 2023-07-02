@@ -30,6 +30,14 @@ export class User {
     type: String,
     required: true,
     trim: true,
+    minlength: 3
+  })
+  name: string;
+
+  @Prop({
+    type: String,
+    required: true,
+    trim: true,
     minlength: 8
   })
   password: string;
@@ -56,6 +64,12 @@ export class User {
 
   @Prop({ type: Boolean, default: false })
   isVerify: boolean;
+
+  @Prop({ type: String, default: null })
+  appId?: string | null;
+
+  @Prop({ type: String, default: null })
+  appSecret?: string | null;
 
   @Prop({
     type: Date,

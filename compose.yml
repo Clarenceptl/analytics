@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   mongo:
@@ -15,7 +15,7 @@ services:
       - /data/db
     ports:
       - "27017:27017"
-  
+
   backoffice:
     container_name: analytics_backoffice
     build:
@@ -28,19 +28,19 @@ services:
     volumes:
       - ./back-office:/app
       - /app/node_modules
-    
+
   analytics-api:
     build:
       context: ./api
       dockerfile: Dockerfile
     container_name: analytics_api
+    tty: true
     env_file:
       - .env
     volumes:
       - ./api:/app
       - /app/node_modules
     ports:
-      - '3080:3080'
+      - "3080:3080"
     depends_on:
       - mongo
-    

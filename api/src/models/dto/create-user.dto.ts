@@ -6,6 +6,10 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
   @IsStrongPassword()
   password: string;
 

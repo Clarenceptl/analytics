@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { hash } from 'bcrypt';
 import { MongoError } from 'mongodb';
 import { Model } from 'mongoose';
+import { generateRandomString } from 'src/helpers';
 import { USER_ROLE, User } from 'src/models';
 import { CreateUserDto } from '../models/dto/create-user.dto';
 import { UpdateUserDto } from '../models/dto/update-user.dto';
@@ -18,6 +19,7 @@ export class UserService {
         ...createUserDto
       });
       await res.save();
+      delete res.password;
       const response: User = res;
       return {
         success: true,
@@ -33,14 +35,29 @@ export class UserService {
     }
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    const user: User[] = await this.userModel.find();
+    if (!user || user.length === 0) {
+      throw new NotFoundException(`Users not found`);
+    }
+    return {
+      success: true,
+      data: user
+    };
+  }
+
+  async findAllUnverified() {
+    const users: User[] = await this.userModel.find({ isVerify: false });
+    return {
+      success: true,
+      data: users
+    };
   }
 
   async findOne(id: string) {
-    const user: User | null = await this.userModel.findOne({ _id: id });
+    const user: User | null = await this.userModel.findOne({ _id: id }).select('-password').exec();
     if (!user) {
-      throw new NotFoundException(`User with id ${id} not found`);
+      throw new NotFoundException(`User not found`);
     }
     return {
       success: true,
@@ -49,12 +66,10 @@ export class UserService {
   }
 
   async findOneByEmail(email: string) {
-    const user: User | null = await this.userModel
-      .findOne({
-        email: email
-      })
-      .select('+password')
-      .exec();
+    const user: User | null = await this.userModel.findOne({
+      email: email
+    });
+
     if (!user) {
       throw new NotFoundException(`User with email ${email} not found`);
     }
@@ -64,8 +79,16 @@ export class UserService {
     };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async delete(id: string) {
+    try {
+      await this.userModel.deleteOne({ _id: id }).exec();
+      return {
+        success: true,
+        data: 'User deleted'
+      };
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
@@ -85,10 +108,14 @@ export class UserService {
   }
 
   async verifyAccount(id: string) {
-    const user: User | null = await this.userModel.findById(id).select('+password').exec();
+    const user: User | null = await this.userModel.findById(id).select('-password').exec();
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
+    user.isVerify = true;
+    user.appSecret = `API_SECRET_${generateRandomString(10)}`;
+    user.appId = `API_ID_${generateRandomString(5)}`;
+
     try {
       await this.userModel.updateOne({ _id: id }, user);
       return {
@@ -113,18 +140,20 @@ export class UserService {
       email: 'user@user.com',
       password,
       company: 'My company',
-      siteUrl: 'https://www.mycompany.com'
+      siteUrl: 'https://www.mycompany.com',
+      name: 'User'
     };
     const admin: CreateUserDto = {
       email: 'admin@admin.com',
       password,
       company: 'My company admin',
-      siteUrl: 'https://www.mycompanyadmin.com'
+      siteUrl: 'https://www.mycompanyadmin.com',
+      name: 'Admin'
     };
 
-    const tmpUser = new this.userModel({ ...user });
+    const tmpUser = new this.userModel({ ...user, isVerify: true });
     await tmpUser.save();
-    const tmpAdmin = new this.userModel({ ...admin, roles: [USER_ROLE.ADMIN] });
+    const tmpAdmin = new this.userModel({ ...admin, roles: [USER_ROLE.ADMIN], isVerify: true });
     await tmpAdmin.save();
     console.log(`Created user with id: ${tmpUser.id}`);
   }

@@ -1,30 +1,50 @@
 import { HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
-import { CreateUserDto, LoginUserDto } from 'src/models';
+import { MailService } from 'src/mail/mail.service';
+import { CreateUserDto, LoginUserDto, RegisterMail, User } from 'src/models';
 import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService, private readonly userService: UserService) {}
+  constructor(
+    private jwtService: JwtService,
+    private readonly userService: UserService,
+    private readonly mailService: MailService
+  ) {}
 
   async login(loginDto: LoginUserDto) {
     try {
-      const { data } = await this.userService.findOneByEmail(loginDto.email);
-      if (!compare(loginDto.password, data.password)) {
-        throw new UnauthorizedException();
+      const res = await this.userService.findOneByEmail(loginDto.email);
+
+      if (!res?.success) {
+        throw new UnauthorizedException('Email ou mot de passe incorrect');
+      }
+
+      const data: User = res.data;
+
+      if (!data.isVerify) {
+        throw new UnauthorizedException('Un administrateur doit valider votre compte');
+      }
+
+      if (!compare(loginDto.password, data.password ?? '')) {
+        throw new UnauthorizedException('Email ou mot de passe incorrect');
       }
       const payload = {
-        sub: data._id.toString(),
+        id: data._id.toString(),
         roles: data.roles
       };
+      const accessToken = await this.jwtService.signAsync(payload, { expiresIn: '1d' });
       return {
-        access_token: await this.jwtService.signAsync(payload, { expiresIn: '1d' })
+        success: true,
+        data: {
+          accessToken
+        }
       };
     } catch (err) {
       if (err instanceof HttpException) {
         if (err instanceof UnauthorizedException || err instanceof NotFoundException) {
-          throw new UnauthorizedException("Email or password don't match");
+          throw new UnauthorizedException(err.message);
         }
         throw err;
       }
@@ -32,11 +52,23 @@ export class AuthService {
     }
   }
 
-  async verifyAccount(id: string) {
+  async verifyAccount(id: string, isVerify: boolean) {
+    if (!isVerify) {
+      return await this.userService.delete(id);
+    }
     return await this.userService.verifyAccount(id);
   }
 
   async register(data: CreateUserDto) {
-    return await this.userService.create(data);
+    const res = await this.userService.create(data);
+    if (res.success) {
+      const user = res.data;
+      const payload: RegisterMail = {
+        email: user.email,
+        fullname: user.name
+      };
+      this.mailService.sendMailRegister(payload);
+    }
+    return res;
   }
 }

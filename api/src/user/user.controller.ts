@@ -1,18 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, Sse, ValidationPipe } from '@nestjs/common';
+import { Observable, interval, map, mergeMap } from 'rxjs';
 import { Roles } from 'src/decorator';
 import { USER_ROLE } from 'src/models';
 import { CreateUserDto } from '../models/dto/create-user.dto';
 import { UpdateUserDto } from '../models/dto/update-user.dto';
 import { UserService } from './user.service';
-import { CleanResponseUser } from './decorator/users.decorator';
 
 @Controller({ path: 'users', version: '1' })
-@CleanResponseUser()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
@@ -22,9 +21,20 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get('self')
+  @Sse('unverified')
+  @Roles(USER_ROLE.ADMIN)
+  sse(): Observable<MessageEvent> {
+    return interval(4000).pipe(
+      mergeMap(async () => await this.userService.findAllUnverified()),
+      map((res) => {
+        return { data: res?.data ?? [] } as MessageEvent;
+      })
+    );
+  }
+
+  @Get('getSelf')
   findSelf(@Req() req: any) {
-    return this.userService.findOne(req.user.id);
+    return this.userService.findOne(req?.user?._id ?? '');
   }
 
   @Get(':id')
@@ -33,12 +43,12 @@ export class UserController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: string, @Body(ValidationPipe) updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userService.delete(id);
   }
 }
