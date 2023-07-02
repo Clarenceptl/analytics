@@ -52,7 +52,10 @@ export class AuthService {
     }
   }
 
-  async verifyAccount(id: string) {
+  async verifyAccount(id: string, isVerify: boolean) {
+    if (!isVerify) {
+      return await this.userService.delete(id);
+    }
     return await this.userService.verifyAccount(id);
   }
 

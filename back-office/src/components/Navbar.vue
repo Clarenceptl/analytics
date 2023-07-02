@@ -7,6 +7,16 @@
     </div>
     <div class="flex-none">
       <ul class="menu menu-horizontal flex items-center px-1">
+        <li v-if="isAdmin">
+          <details>
+            <summary class="text-white hover:text-white">Admin</summary>
+            <ul class="p-2 bg-base-200">
+              <li>
+                <router-link :to="{ name: admin }">Home</router-link>
+              </li>
+            </ul>
+          </details>
+        </li>
         <li v-if="isConnected">
           <details>
             <summary class="text-white hover:text-white">Mon compte</summary>
@@ -36,9 +46,11 @@ import { useUserStore } from '@/stores';
 import { capitalize, computed } from 'vue';
 
 const informations = ROUTES_NAMES.INFORMATIONS;
+const admin = ROUTES_NAMES.HOME_ADMIN;
 
 const userStore = useUserStore();
 const isConnected = computed(() => userStore.isConnected);
+const isAdmin = computed(() => userStore.isAdmin);
 const switchRoute = (isCapitalise?: boolean): string => {
   const res = router.currentRoute.value.name === ROUTES_NAMES.LOGIN ? ROUTES_NAMES.REGISTER : ROUTES_NAMES.LOGIN;
 

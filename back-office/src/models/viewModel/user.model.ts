@@ -5,6 +5,8 @@ export interface User {
 
   email: string;
 
+  name: string;
+
   roles: USER_ROLE[];
 
   company: string;

@@ -65,6 +65,12 @@ export class User {
   @Prop({ type: Boolean, default: false })
   isVerify: boolean;
 
+  @Prop({ type: String, default: null })
+  appId?: string | null;
+
+  @Prop({ type: String, default: null })
+  appSecret?: string | null;
+
   @Prop({
     type: Date,
     required: true,

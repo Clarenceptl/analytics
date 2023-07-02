@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { hash } from 'bcrypt';
 import { MongoError } from 'mongodb';
 import { Model } from 'mongoose';
+import { generateRandomString } from 'src/helpers';
 import { USER_ROLE, User } from 'src/models';
 import { CreateUserDto } from '../models/dto/create-user.dto';
 import { UpdateUserDto } from '../models/dto/update-user.dto';
@@ -46,13 +47,10 @@ export class UserService {
   }
 
   async findAllUnverified() {
-    const user: User[] = await this.userModel.find({ isVerify: false });
-    if (!user || user.length === 0) {
-      throw new NotFoundException(`Users not found`);
-    }
+    const users: User[] = await this.userModel.find({ isVerify: false });
     return {
       success: true,
-      data: user
+      data: users
     };
   }
 
@@ -81,8 +79,16 @@ export class UserService {
     };
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} user`;
+  async delete(id: string) {
+    try {
+      await this.userModel.deleteOne({ _id: id }).exec();
+      return {
+        success: true,
+        data: 'User deleted'
+      };
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
@@ -106,6 +112,10 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
+    user.isVerify = true;
+    user.appSecret = `API_SECRET_${generateRandomString(10)}`;
+    user.appId = `API_ID_${generateRandomString(5)}`;
+
     try {
       await this.userModel.updateOne({ _id: id }, user);
       return {

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, HttpCode, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
 import { Roles, isPublic } from 'src/decorator';
 import { CreateUserDto, LoginUserDto, USER_ROLE } from '../models';
 import { AuthService } from './auth.service';
@@ -23,9 +23,8 @@ export class AuthController {
 
   @Patch('verify-account/:id')
   @Roles(USER_ROLE.ADMIN)
-  @isPublic()
   @HttpCode(200)
-  public verifyAccount(@Param('id') id: string) {
-    return this.authService.verifyAccount(id);
+  public verifyAccount(@Param('id') id: string, @Body(ValidationPipe) verify: { isVerify: boolean }) {
+    return this.authService.verifyAccount(id, verify.isVerify);
   }
 }
