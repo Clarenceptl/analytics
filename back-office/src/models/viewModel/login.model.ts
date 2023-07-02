@@ -11,6 +11,7 @@ export const LoginSchema = object({
 export const RegisterSchema = object({
   company: string().required('Le champ company est requis.').trim(),
   siteUrl: string().required('Le champ siteUrl est requis.').trim(),
+  name: string().required('Le champ nom est requis.').trim(),
   email: string().required('Le champ email est requis.').email("L'email doit être valide.").trim(),
   password: string()
     .required('Le champ mot de passe est requis.')

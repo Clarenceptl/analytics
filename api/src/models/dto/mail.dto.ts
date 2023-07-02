@@ -1,6 +1,5 @@
 export interface RegisterMail {
   email: string;
-  equipe: string;
   fullname: string;
 }
 

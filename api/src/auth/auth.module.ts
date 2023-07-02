@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { MailModule } from 'src/mail/mail.module';
+import { UserModule } from 'src/user';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { JwtModule } from '@nestjs/jwt';
-import { UserModule } from 'src/user';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { SERVICE_NAME } from 'src/enums';
 
 @Module({
   imports: [
@@ -16,16 +15,7 @@ import { SERVICE_NAME } from 'src/enums';
         expiresIn: '1d'
       }
     }),
-    ClientsModule.register([
-      {
-        name: SERVICE_NAME.MAILING,
-        transport: Transport.TCP,
-        options: {
-          host: 'mailing-service',
-          port: 3024
-        }
-      }
-    ])
+    MailModule
   ],
   controllers: [AuthController],
   providers: [AuthService]

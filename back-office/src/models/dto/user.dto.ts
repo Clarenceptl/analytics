@@ -4,4 +4,5 @@ export interface RegisterDTO {
   confirmPassword: string;
   company: string;
   siteUrl: string;
+  name: string;
 }

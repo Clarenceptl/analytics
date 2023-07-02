@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
 import { Roles, isPublic } from 'src/decorator';
 import { CreateUserDto, LoginUserDto, USER_ROLE } from '../models';
 import { AuthService } from './auth.service';

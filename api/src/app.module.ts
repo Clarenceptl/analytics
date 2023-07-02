@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard, RolesGuards } from './guards';
+import { MailModule } from './mail/mail.module';
 import { SeedModule } from './seed/seed.module';
 import { UserModule } from './user/user.module';
 
@@ -16,7 +17,8 @@ import { UserModule } from './user/user.module';
     }),
     AuthModule,
     UserModule,
-    SeedModule
+    SeedModule,
+    MailModule
   ],
   controllers: [],
   providers: [

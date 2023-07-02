@@ -17,6 +17,22 @@
       </Field>
       <ErrorMessage as="p" class="text-red-600" name="email" />
 
+      <Field as="div" name="name" class="mb-1" v-slot="{ field }">
+        <div class="form-control w-full max-w-xs">
+          <label for="name" class="label">
+            Name
+          </label>
+          <input
+            id="name"
+            v-bind="field"
+            type="text"
+            placeholder="Type here"
+            class="input input-bordered input-secondary w-full max-w-xs"
+          />
+        </div>
+      </Field>
+      <ErrorMessage as="p" class="text-red-600" name="name" />
+
       <Field as="div" class="mt-4 mb-1" name="company" v-slot="{ field }">
         <label for="company" class="label">
           <span class="label-text">Company</span>
