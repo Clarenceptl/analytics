@@ -4,9 +4,7 @@ import { hash } from 'bcrypt';
 import { MongoError } from 'mongodb';
 import { Model } from 'mongoose';
 import { generateRandomString } from 'src/helpers';
-import { USER_ROLE, User } from 'src/models';
-import { CreateUserDto } from '../models/dto/create-user.dto';
-import { UpdateUserDto } from '../models/dto/update-user.dto';
+import { Tag, USER_ROLE, User, CreateUserDto, UpdateUserDto } from 'src/models';
 
 @Injectable()
 export class UserService {
@@ -39,6 +37,17 @@ export class UserService {
     const user: User[] = await this.userModel.find();
     if (!user || user.length === 0) {
       throw new NotFoundException(`Users not found`);
+    }
+    return {
+      success: true,
+      data: user
+    };
+  }
+
+  async findByAppId(id: string) {
+    const user: User | null = await this.userModel.findOne({ appId: id }).select('-password').exec();
+    if (!user) {
+      throw new NotFoundException(`User not found`);
     }
     return {
       success: true,
@@ -98,6 +107,21 @@ export class UserService {
     }
     try {
       await this.userModel.updateOne({ _id: id }, updateUserDto);
+      return {
+        success: true,
+        data: user
+      };
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async updateTags(user: User, tag: Tag) {
+    if (!user) {
+      throw new NotFoundException(`User  not found`);
+    }
+    try {
+      await this.userModel.updateOne({ _id: user._id }, { $push: { tags: tag } });
       return {
         success: true,
         data: user

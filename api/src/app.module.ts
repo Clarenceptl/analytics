@@ -7,6 +7,8 @@ import { AuthGuard, RolesGuards } from './guards';
 import { MailModule } from './mail/mail.module';
 import { SeedModule } from './seed/seed.module';
 import { UserModule } from './user/user.module';
+import { EventModule } from './event/event.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -18,7 +20,9 @@ import { UserModule } from './user/user.module';
     AuthModule,
     UserModule,
     SeedModule,
-    MailModule
+    MailModule,
+    EventModule,
+    TagsModule
   ],
   controllers: [],
   providers: [
