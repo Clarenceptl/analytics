@@ -6,7 +6,6 @@ import { MailService } from './mail.service';
 @Module({
   imports: [
     MailerModule.forRoot({
-      // TODO: replace with real smtp server
       transport: process.env.MAIL_URL_SMTP ?? {
         host: 'mailcatcher',
         port: 1025,
