@@ -29,7 +29,7 @@ export class Event {
   @Prop({ type: Object || null, default: null })
   data?: any;
 
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }])
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
   user: User;
 
   @Prop({

@@ -20,7 +20,7 @@ export class Tag {
   })
   isActive: boolean;
 
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }])
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
   user: User;
 }
 
