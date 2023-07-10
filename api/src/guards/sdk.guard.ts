@@ -10,9 +10,10 @@ export class SdkGuards implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
     const { body, headers } = request;
-    if (!body?.appId) return false;
 
-    const response = await this.userService.findByAppId(body?.appID);
+    if (!body?.APP_ID) return false;
+
+    const response = await this.userService.findByAppId(body?.APP_ID);
     if (!response.success) return false;
 
     const user: User = response.data;

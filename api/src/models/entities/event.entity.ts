@@ -18,7 +18,19 @@ export class Event {
     type: String,
     required: true
   })
+  session: string;
+
+  @Prop({
+    type: String,
+    required: true
+  })
   type: string;
+
+  @Prop({
+    type: String,
+    default: null
+  })
+  tag?: string | null;
 
   @Prop({
     type: String,
@@ -28,6 +40,9 @@ export class Event {
 
   @Prop({ type: Object || null, default: null })
   data?: any;
+
+  @Prop({ type: Object || null, default: null })
+  uaParser?: any;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
   user: User;
