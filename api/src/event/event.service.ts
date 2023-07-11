@@ -14,7 +14,7 @@ export class EventService {
     try {
       await res.save();
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      throw new InternalServerErrorException({ message: 'Error creating event', error });
     }
 
     return {

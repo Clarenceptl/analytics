@@ -16,7 +16,7 @@ export class EventController {
       user: req.user,
       ...data
     };
-    console.log('event', event);
+    console.log(createEvent);
     return this.eventService.createEvent(event);
   }
 }
