@@ -29,8 +29,7 @@ export class TagsService {
   }
 
   async getTags(id: string) {
-    const res = await this.tagModel.find({ user: id });
-    console.log(res);
+    return await this.tagModel.find({ user: id });
   }
 
   async desativate(user: User, id: string) {
