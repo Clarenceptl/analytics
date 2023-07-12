@@ -1,6 +1,5 @@
 <template>
   <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
     <h3>
       You’ve successfully created a project with
       <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
@@ -16,15 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import useMousePosition from '@/composables/useMousePosition'
-const { x, y } = useMousePosition()
-
-defineProps({
-  msg: {
-    type: String,
-    required: true
-  }
-})
+import useMousePosition from '../composables/useMousePosition';
+useMousePosition({ APP_ID: 'API_ID_123' });
 </script>
 
 <style scoped>
