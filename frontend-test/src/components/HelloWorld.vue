@@ -8,9 +8,6 @@
     <!-- button click me -->
     <!-- <button v-tracking:click="1 + 1">click me</button> -->
     <button v-track:ASWEER.click="'m'">track</button>
-    <div>
-      <p>Mouse position: {{ x }}, {{ y }}</p>
-    </div>
   </div>
 </template>
 
