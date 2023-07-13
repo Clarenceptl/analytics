@@ -9,16 +9,14 @@ export class Event {
   _id: Types.ObjectId;
 
   @Prop({
-    type: String,
-    required: true
+    type: String
   })
-  visitorId: string;
+  visitorId?: string;
 
   @Prop({
-    type: String,
-    required: true
+    type: String
   })
-  session: string;
+  session?: string;
 
   @Prop({
     type: String,

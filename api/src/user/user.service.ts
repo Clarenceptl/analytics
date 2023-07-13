@@ -4,7 +4,7 @@ import { hash } from 'bcrypt';
 import { MongoError } from 'mongodb';
 import { Model } from 'mongoose';
 import { generateRandomString } from 'src/helpers';
-import { Tag, USER_ROLE, User, CreateUserDto, UpdateUserDto } from 'src/models';
+import { CreateUserDto, Tag, USER_ROLE, UpdateUserDto, User } from 'src/models';
 
 @Injectable()
 export class UserService {
@@ -175,7 +175,7 @@ export class UserService {
       name: 'Admin'
     };
 
-    const tmpUser = new this.userModel({ ...user, isVerify: true });
+    const tmpUser = new this.userModel({ ...user, isVerify: true, appId: 'API_ID_123', appSecret: 'API_SECRET_123' });
     await tmpUser.save();
     const tmpAdmin = new this.userModel({ ...admin, roles: [USER_ROLE.ADMIN], isVerify: true });
     await tmpAdmin.save();

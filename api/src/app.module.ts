@@ -15,7 +15,7 @@ import { TagsModule } from './tags/tags.module';
     MongooseModule.forRoot(process.env.DATABASE_MONGO_URL),
     ThrottlerModule.forRoot({
       ttl: 60,
-      limit: 10
+      limit: 62
     }),
     AuthModule,
     UserModule,

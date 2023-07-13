@@ -23,3 +23,22 @@ export class SdkGuards implements CanActivate {
     return true;
   }
 }
+
+export class SdkBackGuards implements CanActivate {
+  constructor(private userService: UserService) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request: Request = context.switchToHttp().getRequest();
+    const { body } = request;
+
+    if (!body?.APP_ID || !body?.APP_SECRET) return false;
+
+    const response = await this.userService.findByAppId(body?.APP_ID);
+    if (!response.success) return false;
+    if (response.data.appSecret !== body.APP_SECRET) return false;
+    const user: User = response.data;
+
+    request['user'] = user;
+    return true;
+  }
+}
