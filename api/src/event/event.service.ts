@@ -49,4 +49,25 @@ export class EventService {
       data: res
     };
   }
+
+  async getSpecificData(filters: any) {
+    // const filterExample = {
+    //   type: 'pageview',
+    //   tag: 'home',
+    //   date: {
+    //     $gte: new Date('2021-01-01T00:00:00.000Z'),
+    //     $lt: new Date('2021-01-31T00:00:00.000Z'),
+    //     step: 1
+    //   },
+    //   nbType: 'percent' || 'number',
+    //   graphType: 'line' || 'bar'
+    // };
+
+    const res = await this.eventModel.find(filters);
+
+    return {
+      success: true,
+      data: res
+    };
+  }
 }
