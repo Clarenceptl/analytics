@@ -69,8 +69,8 @@ export class User {
   @Prop({ type: String, default: null })
   appId?: string | null;
 
-  @Prop({ type: String, default: null })
-  appSecret?: string | null;
+  @Prop({ type: Array<string>, default: [] })
+  appSecret?: string[];
 
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag', default: [] }])
   tags: Tag[];

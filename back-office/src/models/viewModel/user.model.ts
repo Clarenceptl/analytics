@@ -9,6 +9,8 @@ export interface User {
 
   roles: USER_ROLE[];
 
+  appSecret: string[];
+
   company: string;
 
   siteUrl: string;

@@ -137,7 +137,7 @@ export class UserService {
       throw new NotFoundException(`User with id ${id} not found`);
     }
     user.isVerify = true;
-    user.appSecret = `API_SECRET_${generateRandomString(10)}`;
+    user.appSecret = [...user.appSecret, `API_SECRET_${generateRandomString(10)}`];
     user.appId = `API_ID_${generateRandomString(5)}`;
 
     try {
@@ -175,7 +175,7 @@ export class UserService {
       name: 'Admin'
     };
 
-    const tmpUser = new this.userModel({ ...user, isVerify: true, appId: 'API_ID_123', appSecret: 'API_SECRET_123' });
+    const tmpUser = new this.userModel({ ...user, isVerify: true, appId: 'API_ID_123', appSecret: ['API_SECRET_123'] });
     await tmpUser.save();
     const tmpAdmin = new this.userModel({ ...admin, roles: [USER_ROLE.ADMIN], isVerify: true });
     await tmpAdmin.save();

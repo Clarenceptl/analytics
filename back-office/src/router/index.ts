@@ -8,7 +8,8 @@ export enum ROUTES_NAMES {
   LOGIN = 'login',
   REGISTER = 'register',
   INFORMATIONS = 'informations',
-  NOT_FOUND = 'not-found'
+  NOT_FOUND = 'not-found',
+  SECRET = 'secret'
 }
 
 const router = createRouter({
@@ -48,6 +49,16 @@ const router = createRouter({
       path: '/my-informations',
       name: ROUTES_NAMES.INFORMATIONS,
       component: () => import('@/views/MesInformations.vue'),
+      beforeEnter: async (to, from, next) => {
+        const isAuth = await authMiddleware();
+        if (!isAuth) return next({ name: ROUTES_NAMES.LOGIN });
+        next();
+      }
+    },
+    {
+      path: '/secret',
+      name: ROUTES_NAMES.SECRET,
+      component: () => import('@/views/SecretManager.vue'),
       beforeEnter: async (to, from, next) => {
         const isAuth = await authMiddleware();
         if (!isAuth) return next({ name: ROUTES_NAMES.LOGIN });

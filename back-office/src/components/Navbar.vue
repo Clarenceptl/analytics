@@ -19,13 +19,16 @@
         </li>
         <li v-if="isConnected">
           <details>
-            <summary class="text-white hover:text-white">Mon compte</summary>
+            <summary class="text-white hover:text-white">Menu</summary>
             <ul class="p-2 bg-base-200">
               <li>
-                <router-link :to="{ name: informations }">Mes informations</router-link>
+                <router-link :to="{ name: secret }">Secret</router-link>
               </li>
             </ul>
           </details>
+        </li>
+        <li v-if="isConnected">
+          <router-link class="text-white hover:text-white" :to="{ name: informations }">Mon compte</router-link>
         </li>
       </ul>
 
@@ -47,6 +50,7 @@ import { capitalize, computed } from 'vue';
 
 const informations = ROUTES_NAMES.INFORMATIONS;
 const admin = ROUTES_NAMES.HOME_ADMIN;
+const secret = ROUTES_NAMES.SECRET;
 
 const userStore = useUserStore();
 const isConnected = computed(() => userStore.isConnected);
