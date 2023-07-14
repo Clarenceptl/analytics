@@ -44,7 +44,6 @@ const usersToVerify = ref<User[]>([]);
 
 const handleVerification = async (user: User, isVerify: boolean) => {
   const res = await UserService.verifyUser(user._id, isVerify);
-  console.log(res);
   if (res.success) {
     toastStore.createToast({
       message: `Le compte de ${user.name} a été ${isVerify ? 'accepté' : 'refusé'}`,

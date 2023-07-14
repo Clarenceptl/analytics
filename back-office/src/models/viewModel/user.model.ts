@@ -15,6 +15,8 @@ export interface User {
 
   isVerify: boolean;
 
+  appId?: string;
+
   createdAt: Date;
 
   updatedAt: Date;
