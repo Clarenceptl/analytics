@@ -9,6 +9,7 @@ import { SeedModule } from './seed/seed.module';
 import { UserModule } from './user/user.module';
 import { EventModule } from './event/event.module';
 import { TagsModule } from './tags/tags.module';
+import { MetricsModule } from './metrics/metrics.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { TagsModule } from './tags/tags.module';
     SeedModule,
     MailModule,
     EventModule,
-    TagsModule
+    TagsModule,
+    MetricsModule
   ],
   controllers: [],
   providers: [
