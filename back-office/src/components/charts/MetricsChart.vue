@@ -6,12 +6,12 @@
 </template>
 
 <script>
-import { Line, mixins } from 'vue-chartjs';
+import { Line } from 'vue-chartjs';
 import axios from 'axios';
 
 export default {
   extends: Line,
-  mixins: [mixins.reactiveProp],
+  // mixins: [mixins.reactiveProp],
   props: ['chartData', 'chartOptions', 'chartTitle'],
   mounted() {
     this.renderChart(this.chartData, this.chartOptions);

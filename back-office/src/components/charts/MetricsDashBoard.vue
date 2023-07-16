@@ -15,7 +15,7 @@
 <script>
 import { defineComponent, ref, onMounted } from 'vue';
 import MetricsChart from './MetricsChart.vue';
-import axios from 'axios';
+import axios from "axios";
 
 export default defineComponent({
   name: 'MetricsDashboard',
@@ -45,7 +45,7 @@ export default defineComponent({
 
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/kpi'); // Replace with your backend API URL
+        const response = await axios.get('http://localhost:3080/metrics'); // Replace with your backend API URL
         MetricsData.value = response.data;
 
         lineChartData.value.labels = MetricsData.value.map((metrics) => metrics.name);
