@@ -29,7 +29,14 @@ export class TagsService {
   }
 
   async getTags(id: string) {
-    return await this.tagModel.find({ user: id });
+    const res = await this.tagModel.find({ user: id });
+    if (!res) {
+      throw new NotFoundException('Tag not found');
+    }
+    return {
+      success: true,
+      data: res
+    };
   }
 
   async desativate(user: User, id: string) {
