@@ -8,7 +8,8 @@ export enum ROUTES_NAMES {
   LOGIN = 'login',
   REGISTER = 'register',
   INFORMATIONS = 'informations',
-  NOT_FOUND = 'not-found'
+  NOT_FOUND = 'not-found',
+  GRAPHS = 'graphs'
 }
 
 const router = createRouter({
@@ -51,6 +52,16 @@ const router = createRouter({
       beforeEnter: async (to, from, next) => {
         const isAuth = await authMiddleware();
         if (!isAuth) return next({ name: ROUTES_NAMES.LOGIN });
+        next();
+      }
+    },
+    {
+      path: '/graphs',
+      name: ROUTES_NAMES.GRAPHS,
+      component: () => import('@/views/Graphs.vue'),
+      beforeEnter: async (to, from, next) => {
+        const isAuth = await authMiddleware();
+        if (!isAuth) return next({name: ROUTES_NAMES.GRAPHS});
         next();
       }
     },
