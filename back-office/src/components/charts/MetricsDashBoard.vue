@@ -7,7 +7,7 @@
         chart-title="KPI Line Chart"
     />
     <div v-else>
-      No KPI data available.
+      Pas de donnée Métrique disponible.
     </div>
   </div>
 </template>
