@@ -14,12 +14,39 @@ export class EventService {
     try {
       await res.save();
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      throw new InternalServerErrorException({ message: 'Error creating event', error });
     }
 
     return {
       success: true,
       data: 'event created'
+    };
+  }
+
+  async getEventsPageviews() {
+    const res = await this.eventModel.find({ type: 'pageview' });
+
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  async getEventsMouse() {
+    const res = await this.eventModel.find({ type: 'mouse' });
+
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  async getEventsByTags(tag: string) {
+    const res = await this.eventModel.find({ tag: tag });
+
+    return {
+      success: true,
+      data: res
     };
   }
 }
