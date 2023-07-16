@@ -57,3 +57,10 @@ services:
       - "3080:3080"
     depends_on:
       - mongo
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    container_name: analytics_mailcatcher
+    ports:
+      - "1080:1080"
+      - "1025:1025"
