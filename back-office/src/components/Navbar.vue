@@ -24,6 +24,9 @@
               <li>
                 <router-link :to="{ name: informations }">Mes informations</router-link>
               </li>
+              <li>
+                <router-link :to="{ name: graphs }">Mes Graphiques</router-link>
+              </li>
             </ul>
           </details>
         </li>
@@ -47,7 +50,7 @@ import { capitalize, computed } from 'vue';
 
 const informations = ROUTES_NAMES.INFORMATIONS;
 const admin = ROUTES_NAMES.HOME_ADMIN;
-
+const graphs = ROUTES_NAMES.GRAPHS;
 const userStore = useUserStore();
 const isConnected = computed(() => userStore.isConnected);
 const isAdmin = computed(() => userStore.isAdmin);
