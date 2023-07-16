@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Put, Query} from '@nestjs/common';
 import { MetricsService } from './metrics.service';
 import { MetricsDto } from '../models/dto/metrics.dto';
 import { Metrics } from '../models/entities/metrics.entity';
@@ -29,5 +29,13 @@ export class MetricsController {
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<Metrics> {
     return this.MetricsService.delete(id);
+  }
+
+  @Get('query')
+  async findWithQuery(
+    @Query('dimensions') queryDimensions: string,
+    @Query('timeScale') timeScale: string
+  ): Promise<Metrics[]> {
+    return this.MetricsService.findWithQuery(queryDimensions, timeScale);
   }
 }
