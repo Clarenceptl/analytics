@@ -6,6 +6,7 @@ import { EventService } from './event.service';
 
 @Controller({ path: 'event', version: '1' })
 export class EventController {
+  private filters = null;
   constructor(private readonly eventService: EventService) {}
 
   @Post('front')
@@ -21,6 +22,25 @@ export class EventController {
     return this.eventService.createEvent(event);
   }
 
+  @Post('specific')
+  getSpecificGraph(@Req() req: RequestWithUser, @Body(ValidationPipe) filter: any) {
+    this.filters = filter;
+    return {
+      success: true,
+      data: 'ok'
+    };
+  }
+
+  @Sse('specific/data')
+  specificData(): Observable<MessageEvent> {
+    return interval(2000).pipe(
+      mergeMap(async () => await this.eventService.getSpecificData(this.filters)),
+      map((res) => {
+        return { data: res?.data ?? [] } as MessageEvent;
+      })
+    );
+  }
+
   @Post('backend')
   @ApiSecretGuard()
   @isPublic()
@@ -32,11 +52,6 @@ export class EventController {
     };
     console.log(createEvent);
     return this.eventService.createEvent(event);
-  }
-
-  @Post('pageviews')
-  getEventsPageviews() {
-    return this.eventService.getEventsPageviews();
   }
 
   @Sse('pageviews')

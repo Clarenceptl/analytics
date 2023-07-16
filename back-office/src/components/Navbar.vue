@@ -2,7 +2,8 @@
   <div class="navbar bg-teal-700 z-10 relative">
     <div class="flex-1">
       <router-link :to="{ name: ROUTES_NAMES.HOME }" class="btn btn-ghost normal-case text-xl text-white"
-        >Analytics</router-link
+      >Analytics
+      </router-link
       >
     </div>
     <div class="flex-none">
@@ -24,14 +25,21 @@
               <li>
                 <router-link :to="{ name: informations }">Mes informations</router-link>
               </li>
+              <li>
+                <router-link :to="{ name: tags }">Mes Tags</router-link>
+              </li>
+              <li>
+                <router-link :to="{ name: graphs }">Mes Graphiques</router-link>
+              </li>
             </ul>
           </details>
         </li>
       </ul>
 
       <router-link v-if="!isConnected" class="btn btn-secondary" :to="{ name: switchRoute() }">{{
-        switchRoute(true)
-      }}</router-link>
+          switchRoute(true)
+        }}
+      </router-link>
 
       <button @click="logout" v-else class="btn btn-secondary h-full flex items-center">
         <span>Logout</span>
@@ -41,13 +49,14 @@
 </template>
 
 <script lang="ts" setup>
-import router, { ROUTES_NAMES } from '@/router';
-import { useUserStore } from '@/stores';
-import { capitalize, computed } from 'vue';
+import router, {ROUTES_NAMES} from '@/router';
+import {useUserStore} from '@/stores';
+import {capitalize, computed} from 'vue';
 
 const informations = ROUTES_NAMES.INFORMATIONS;
 const admin = ROUTES_NAMES.HOME_ADMIN;
-
+const tags = ROUTES_NAMES.TAGS;
+const graphs = ROUTES_NAMES.GRAPHS;
 const userStore = useUserStore();
 const isConnected = computed(() => userStore.isConnected);
 const isAdmin = computed(() => userStore.isAdmin);
@@ -59,6 +68,6 @@ const switchRoute = (isCapitalise?: boolean): string => {
 
 const logout = () => {
   userStore.logout();
-  router.push({ name: ROUTES_NAMES.LOGIN });
+  router.push({name: ROUTES_NAMES.LOGIN});
 };
 </script>

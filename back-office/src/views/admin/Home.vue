@@ -1,5 +1,5 @@
 <template>
-  <h1 class="">Home Admin</h1>
+  <h1 class="">Webmasters</h1>
 
   <div class="overflow-x-auto">
     <table v-if="users" class="table table-zebra">
