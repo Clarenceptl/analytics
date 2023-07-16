@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Metrics } from '../models/entities/metrics.entity';
-import { MetricsDto } from '../models/dto/metrics.dto';
 import { CreateMetricsDto } from '../models/dto/create-metrics.dto';
 import { UpdateMetricsDto } from '../models/dto/update-metrics.dto';
 

@@ -1,13 +1,14 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, Query} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { MetricsService } from './metrics.service';
-import { MetricsDto } from '../models/dto/metrics.dto';
 import { Metrics } from '../models/entities/metrics.entity';
+import { CreateMetricsDto } from '../models/dto/create-metrics.dto';
+import { UpdateMetricsDto } from '../models/dto/update-metrics.dto';
 
 @Controller('metrics')
 export class MetricsController {
   constructor(private readonly MetricsService: MetricsService) {}
   @Post()
-  async create(@Body() createMetricsDto: MetricsDto): Promise<Metrics> {
+  async create(@Body() createMetricsDto: CreateMetricsDto): Promise<Metrics> {
     return this.MetricsService.create(createMetricsDto);
   }
 
@@ -22,7 +23,7 @@ export class MetricsController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateMetricsDto: MetricsDto): Promise<Metrics> {
+  async update(@Param('id') id: string, @Body() updateMetricsDto: UpdateMetricsDto): Promise<Metrics> {
     return this.MetricsService.update(id, updateMetricsDto);
   }
 
