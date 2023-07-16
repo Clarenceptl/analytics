@@ -13,7 +13,7 @@ import { MailService } from './mail.service';
         secure: false
       },
       defaults: {
-        from: '"larudakoé" <noreply@larudakote.com>'
+        from: '"Analyweb" <noreply@Analyweb.com>'
       },
 
       template: {
