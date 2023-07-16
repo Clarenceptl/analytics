@@ -87,12 +87,12 @@ const { tags } = tagStore;
 
 const createTag = async () => {
   const res = await tagStore.createTag(commentaire.value).then(async () => {
+    await tagStore.getTags();
     toastStore.createToast({
       message: 'Le tag a été créé',
       type: TOAST_TYPE.SUCCESS
     });
     commentaire.value = ''
-    await tagStore.getTags();
   }).catch((err) => {
     toastStore.createToast({
       message: err.message,
