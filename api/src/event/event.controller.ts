@@ -17,7 +17,6 @@ export class EventController {
       user: req.user,
       ...data
     };
-    console.log(createEvent);
     return this.eventService.createEvent(event);
   }
 
@@ -34,15 +33,11 @@ export class EventController {
     return this.eventService.createEvent(event);
   }
 
-  @Post('pageviews')
-  getEventsPageviews() {
-    return this.eventService.getEventsPageviews();
-  }
-
   @Sse('pageviews')
-  pageviews(): Observable<MessageEvent> {
+  pageviews(@Req() req: any): Observable<MessageEvent> {
+    const user = req.user;
     return interval(2000).pipe(
-      mergeMap(async () => await this.eventService.getEventsPageviews()),
+      mergeMap(async () => await this.eventService.getEventsPageviews(user)),
       map((res) => {
         return { data: res?.data ?? [] } as MessageEvent;
       })

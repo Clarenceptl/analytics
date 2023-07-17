@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument, Types } from 'mongoose';
-import { IsEnum, IsOptional } from 'class-validator';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type EventDocument = HydratedDocument<Metrics>;
 

@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Event } from 'src/models';
+import { Event, User } from 'src/models';
 
 @Injectable()
 export class EventService {
@@ -23,8 +23,8 @@ export class EventService {
     };
   }
 
-  async getEventsPageviews() {
-    const res = await this.eventModel.find({ type: 'pageview' });
+  async getEventsPageviews(user: User) {
+    const res = await this.eventModel.find({ type: 'pageview', user: user });
 
     return {
       success: true,
