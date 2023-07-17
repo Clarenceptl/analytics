@@ -27,6 +27,41 @@
         </div>
         <span v-else class="loading loading-ring loading-lg"></span>
       </div>
+      <div v-else class="flex flex-col">
+        <div class="overflow-x-auto">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>Commentaire</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(tag, index) in tags"
+                :key="tag._id"
+                class="bg-base-200"
+              >
+                <th>{{ tag._id }}</th>
+                <td>{{ tag.commentaire || 'N/A' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="btn" onclick="my_modal_2.showModal()">Ajouter un tag</button>
+        <dialog id="my_modal_2" class="modal">
+          <form method="dialog" class="modal-box">
+            <h3 class="font-bold text-lg">Voulez vous ajouter un tags ?</h3>
+            <p>ajouter un commentaire ?</p>
+            <textarea rows="5" style="border: 1px solid #ccc; width: 100%;" v-model="commentaire"></textarea>
+            <button class="btn btn-primary" @click="createTag(); commentaire = ''">Ajouter</button>
+            <button class="btn" onclick="my_modal_2.close(); commentaire = ''">Annuler</button>
+          </form>
+          <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+          </form>
+        </dialog>
+      </div>
     </div>
   </div>
 </template>
@@ -35,13 +70,38 @@
 import { TOAST_TYPE } from '@/enums';
 import type { User } from '@/models';
 import { UserService } from '@/services';
-import { useToastStore, useUserStore } from '@/stores';
+import { useTagStore, useToastStore, useUserStore } from '@/stores';
 import type { EventSourcePolyfill } from 'event-source-polyfill';
 import { computed, onBeforeUnmount, ref } from 'vue';
 
 const userStore = useUserStore();
 const toastStore = useToastStore();
+const tagStore = useTagStore();
 
+const user = userStore.getContextUser;
+let {...commentaire} = ref('')
+
+
+await tagStore.getTags();
+const { tags } = tagStore;
+
+const createTag = async () => {
+  const res = await tagStore.createTag(commentaire.value).then(async () => {
+    await tagStore.getTags();
+    toastStore.createToast({
+      message: 'Le tag a été créé',
+      type: TOAST_TYPE.SUCCESS
+    });
+    commentaire.value = ''
+  }).catch((err) => {
+    toastStore.createToast({
+      message: err.message,
+      type: TOAST_TYPE.ERROR
+    });
+    commentaire.value = ''
+    console.error(err);
+  });
+}
 const isAdmin = computed(() => userStore.isAdmin);
 
 let getListUser: EventSourcePolyfill | null = null;

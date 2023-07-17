@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
+import mongoose, { HydratedDocument, Types } from 'mongoose';
+import { Tag } from './tag.entity';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -70,6 +71,9 @@ export class User {
 
   @Prop({ type: String, default: null })
   appSecret?: string | null;
+
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag', default: [] }])
+  tags: Tag[];
 
   @Prop({
     type: Date,

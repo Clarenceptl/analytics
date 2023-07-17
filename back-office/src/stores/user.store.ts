@@ -52,7 +52,7 @@ export const useUserStore = defineStore('userStore', () => {
   };
 
   const updateUserAdmin = async (user: UpdateUserDTO) => {
-    return await AuthService(user);
+    return await AuthService.updateUser(user);
   };
 
   const login = async (data: LoginVM) => {

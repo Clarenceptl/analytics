@@ -1,9 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req, Sse, ValidationPipe } from '@nestjs/common';
 import { Observable, interval, map, mergeMap } from 'rxjs';
 import { Roles } from 'src/decorator';
-import { USER_ROLE } from 'src/models';
-import { CreateUserDto } from '../models/dto/create-user.dto';
-import { UpdateUserDto } from '../models/dto/update-user.dto';
+import { CreateUserDto, USER_ROLE, UpdateUserDto } from 'src/models';
 import { UserService } from './user.service';
 
 @Controller({ path: 'users', version: '1' })
@@ -24,7 +22,7 @@ export class UserController {
   @Sse('unverified')
   @Roles(USER_ROLE.ADMIN)
   sse(): Observable<MessageEvent> {
-    return interval(4000).pipe(
+    return interval(3000).pipe(
       mergeMap(async () => await this.userService.findAllUnverified()),
       map((res) => {
         return { data: res?.data ?? [] } as MessageEvent;
